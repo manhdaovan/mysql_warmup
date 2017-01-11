@@ -35,7 +35,7 @@ module MysqlWarmup
     end
 
     def warmup_only
-      write_log("START WARMUP FOR DB: #{@database}")
+      write_log(">>>>>>> START WARMUP FOR DB: #{@database} <<<<<<")
       tables = @connector.query('show tables')
       table  = tables.fetch_row
       while table
@@ -43,14 +43,16 @@ module MysqlWarmup
         fields_infos = fetch_fields_infos(table[0])
 
         table_instance = MysqlWarmup::Table.new(table[0], fields_infos)
+        write_log("START WARMUP FOR TABLE:   `#{@database}`.`#{table[0]}`")
         table_instance.indexes.each do |i|
-          touch(i.build_query_string)
+          touch(i.query_string)
         end
+        write_log("SUCCESS WARMUP FOR TABLE: `#{@database}`.`#{table[0]}`\n\n")
 
         # Continue fetching table
         table = tables.fetch_row
       end
-      write_log("SUCCESS WARMUP FOR DB: #{@database}\n\n")
+      write_log("+++++++ SUCCESS WARMUP FOR DB: #{@database} +++++++\n\n")
     rescue Mysql::Error => e
       write_log("ERROR: ----------- #{e.message}")
       write_log("BACKTRACE: ------- #{e.backtrace[0, 5]}")
@@ -70,8 +72,7 @@ module MysqlWarmup
     end
 
     def touch(query_string)
-      write_log(query_string)
-      # @connector.query(query_string)
+      @connector.query(query_string)
     end
 
     def write_log(log_msg)

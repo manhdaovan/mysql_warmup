@@ -25,7 +25,8 @@ module MysqlWarmup
       indexes_infos.each do |index_info|
         indexes << MysqlWarmup::Index.new(@table_name,
                                           index_info[DESC_TABLE_STRUCTURE[:field]],
-                                          index_info[DESC_TABLE_STRUCTURE[:type]])
+                                          index_info[DESC_TABLE_STRUCTURE[:type]],
+                                          index_info[DESC_TABLE_STRUCTURE[:key]])
       end
       indexes
     end
