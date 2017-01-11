@@ -72,6 +72,7 @@ module MysqlWarmup
     end
 
     def touch(query_string)
+      # write_log(query_string)
       @connector.query(query_string)
     end
 
