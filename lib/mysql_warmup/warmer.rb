@@ -38,7 +38,7 @@ module MysqlWarmup
     def warmup_all_dbs
       @connector.list_dbs.each do |db|
         next if EXCLUDE_DATABASES.include?(db)
-        MysqlWarmup::Warmer.new(@host, @username, @password, db).warmup
+        MysqlWarmup::Warmer.new(@host, @username, @password, @port, db).warmup
       end
     end
 

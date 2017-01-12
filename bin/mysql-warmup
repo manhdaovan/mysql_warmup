@@ -5,18 +5,6 @@ $LOAD_PATH.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
 require 'mysql_warmup'
 require 'optparse'
 
-def params_valid?(options)
-  required_params = [:host, :username]
-  valid           = true
-  required_params.each do |rp|
-    next unless options.fetch(rp, nil).nil?
-    puts
-    puts ">>> ERROR: Required #{rp}"
-    valid = false
-  end
-  valid
-end
-
 def print_help
   puts "mysql-warmup, by ManhDV - version #{MysqlWarmup::VERSION}"
   puts 'Website: https://github.com/manhdaovan/mysql_warmup'
@@ -33,7 +21,23 @@ def print_help
   puts '--version    : Show mysql-warmup version'
 end
 
-options = {show_version: false, help: false, port: 3306, database: 'all'}
+def print_error(msg)
+  puts
+  puts ">>> ERROR: #{msg}"
+end
+
+def params_valid?(options)
+  required_params = [:host, :username]
+  valid           = true
+  required_params.each do |rp|
+    next unless options.fetch(rp, nil).nil?
+    print_error("Required #{rp}")
+    valid = false
+  end
+  valid
+end
+
+options = { show_version: false, help: false, port: 3306, database: 'all' }
 
 begin
   OptionParser.new do |opts|
@@ -63,26 +67,29 @@ begin
     end
   end.parse!
 rescue OptionParser::InvalidArgument, OptionParser::InvalidOption => e
-  puts ">>> ERROR: #{e.message}"
+  print_error(e.message)
   print_help
   exit(0)
 end
 
-puts options.inspect
-
+# Execute command base on input
 if options[:show_version]
   puts MysqlWarmup::VERSION
 elsif options[:help]
   print_help
 elsif params_valid?(options)
   puts
-  puts 'Input the password:'
+  puts 'Input the mysql password:'
   password = gets.chomp
-  MysqlWarmup::Warmer.new(options[:host],
-                          options[:username],
-                          password,
-                          options[:port].to_i,
-                          options[:database]).warmup
+  begin
+    MysqlWarmup::Warmer.new(options[:host],
+                            options[:username],
+                            password,
+                            options[:port].to_i,
+                            options[:database]).warmup
+  rescue => e
+    print_error(e.message)
+  end
 else
   print_help
 end
