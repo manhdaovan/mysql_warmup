@@ -1,6 +1,6 @@
 # mysql_warmup
-Simple mysql-wamup command tool for warming up mysql server after create/reboot
-[Github](https://github.com/manhdaovan/mysql_warmup)
+Simple mysql-wamup command tool for warming up mysql server after create/reboot <br/>
+[Github](https://github.com/manhdaovan/mysql_warmup) <br/>
 [RubyGems](https://rubygems.org/gems/mysql-warmup)
 
 # Background
