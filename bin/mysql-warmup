@@ -10,6 +10,7 @@ def params_valid?(options)
   valid           = true
   required_params.each do |rp|
     next unless options.fetch(rp, nil).nil?
+    puts
     puts ">>> ERROR: Required #{rp}"
     valid = false
   end
@@ -77,11 +78,11 @@ elsif params_valid?(options)
   puts
   puts 'Input the password:'
   password = gets.chomp
-  MysqlWarmup::Warmer.new(options[:host].strip,
-                          options[:username].strip,
+  MysqlWarmup::Warmer.new(options[:host],
+                          options[:username],
                           password,
-                          options[:database].strip,
-                          options[:port].strip.to_i).warmup
+                          options[:port].to_i,
+                          options[:database]).warmup
 else
   print_help
 end
