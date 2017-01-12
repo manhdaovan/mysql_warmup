@@ -10,7 +10,7 @@ def params_valid?(options)
   valid           = true
   required_params.each do |rp|
     valid = false
-    puts "Error: Required #{rp}" if options.fetch(rp, nil).nil?
+    puts ">>> ERROR: Required #{rp}" if options.fetch(rp, nil).nil?
   end
   valid
 end
@@ -27,7 +27,8 @@ def print_help
   puts '-d database  : Database to warmup.'
   puts '               Default to all databases exclude information_schema, mysql, performance_schema, sys'
   puts '-p port      : Port to connect. Default to 3306'
-  puts '--help       : Print help message'
+  puts '--help       : Show help message'
+  puts '--version    : Show mysql-warmup version'
 end
 
 options = {show_version: false, help: false, port: 3306, database: ''}
@@ -35,19 +36,19 @@ options = {show_version: false, help: false, port: 3306, database: ''}
 begin
   OptionParser.new do |opts|
     opts.banner = 'Usage: mysql-warmup -h host-or-ip -u username <options>'
-    opts.on('-h', String) do |h|
+    opts.on('-h host', String) do |h|
       options[:host] = h
     end
 
-    opts.on('-u') do |u|
+    opts.on('-u username') do |u|
       options[:username] = u
     end
 
-    opts.on('-d') do |d|
+    opts.on('-d database') do |d|
       options[:database] = d
     end
 
-    opts.on('-p') do |p|
+    opts.on('-p port') do |p|
       options[:port] = p
     end
 
@@ -55,13 +56,14 @@ begin
       options[:help] = true
     end
 
-    opts.on('-v', '--version') do |_|
+    opts.on('--version') do |_|
       options[:show_version] = true
     end
   end.parse!
 rescue OptionParser::InvalidArgument, OptionParser::InvalidOption => e
-  puts "ERROR: #{e.message}"
+  puts ">>> ERROR: #{e.message}"
   print_help
+  exit(0)
 end
 
 puts options.inspect
@@ -71,13 +73,14 @@ if options[:show_version]
 elsif options[:help]
   print_help
 elsif params_valid?(options)
+  puts
   puts 'Input the password:'
   password = gets.chomp
   MysqlWarmup::Warmer.new(options[:host].strip,
                           options[:username].strip,
                           password,
                           options[:database].strip,
-                          options[:port].strip).warmup
+                          options[:port].strip.to_i).warmup
 else
   print_help
 end
