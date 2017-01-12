@@ -43,3 +43,6 @@ You can use this tool for warming up buffer poll before the first requests come.
 * All PR are welcome.
 * Be sure all test cases are passed by command: `$rake test`
 
+# License
+MIT
+
