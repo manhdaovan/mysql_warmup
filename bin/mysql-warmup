@@ -33,7 +33,7 @@ def print_help
   puts '--version    : Show mysql-warmup version'
 end
 
-options = {show_version: false, help: false, port: 3306, database: ''}
+options = {show_version: false, help: false, port: 3306, database: 'all'}
 
 begin
   OptionParser.new do |opts|
