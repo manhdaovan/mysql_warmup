@@ -3,17 +3,19 @@ module MysqlWarmup
   class Warmer
     ALL_DATABASE      = 'all'.freeze
     EXCLUDE_DATABASES = %w(information_schema mysql performance_schema sys).freeze
+    PREVENT_VARIABLES = [:@host, :@username, :@password, :@database, :@port].freeze
 
-    def initialize(host, username, password, database = 'all')
+    def initialize(host, username, password, port = 3306, database = 'all')
       @host     = host
       @username = username
       @password = password
       @database = database
+      @port     = port
 
       @connector = if warmup_all?
-                     Mysql.new(@host, @username, @password)
+                     Mysql.new(@host, @username, @password, '', @port)
                    else
-                     Mysql.new(@host, @username, @password, @database)
+                     Mysql.new(@host, @username, @password, @database, @port)
                    end
     end
 
@@ -21,8 +23,14 @@ module MysqlWarmup
       warmup_all? ? warmup_all_dbs : warmup_only
     end
 
+    # Prevent inspection object
     def inspect
       "#<MysqlWarmup::Warmer:#{object_id}>"
+    end
+
+    def instance_variable_get(*several_variants)
+      raise 'Not allow to view this variable' if PREVENT_VARIABLES.include?(several_variants[0])
+      super
     end
 
     private

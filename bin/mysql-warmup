@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+
+$LOAD_PATH.unshift(File.expand_path('../lib', File.dirname(__FILE__)))
+require 'mysql_warmup'
+require 'optparse'
+
+def params_valid?(options)
+  required_params = [:host, :username]
+  valid           = true
+  required_params.each do |rp|
+    valid = false
+    puts "Error: Required #{rp}" if options.fetch(rp, nil).nil?
+  end
+  valid
+end
+
+def print_help
+  puts 'Usage: mysql-warmup -h host-or-ip -u username <options>'
+  puts
+  puts 'Input options:'
+  puts '-h host      : Host or ip of mysql instance'
+  puts '-u username  : Username to access mysql instance'
+  puts '-d database  : Database to warmup. Default to all databases exclude information_schema, mysql, performance_schema, sys'
+  puts '-p port      : Port to connect. Default to 3306'
+  puts '--help       : Print help message'
+end
+
+options = { help: false, port: 3306, database: '' }
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: mysql-warmup -h host-or-ip -u username <options>'
+  opts.on('-h') do |h|
+    options[:host] = h
+  end
+
+  opts.on('-u') do |u|
+    options[:username] = u
+  end
+
+  opts.on('-d') do |d|
+    options[:database] = d
+  end
+
+  opts.on('-p') do |p|
+    options[:port] = p
+  end
+
+  opts.on('--help') do |_|
+    options[:help] = true
+  end
+end.parse!
+
+if !options[:help] && params_valid?
+  puts 'Input the password:'
+  password = gets.chomp
+  MysqlWarmup::Warmer.new(options[:host],
+                          options[:username],
+                          password,
+                          options[:database],
+                          options[:port]).warmup
+else
+  print_help
+end
