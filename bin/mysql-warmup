@@ -16,49 +16,68 @@ def params_valid?(options)
 end
 
 def print_help
+  puts "mysql-warmup, by ManhDV - version #{MysqlWarmup::VERSION}"
+  puts 'Website: https://github.com/manhdaovan/mysql_warmup'
+  puts
   puts 'Usage: mysql-warmup -h host-or-ip -u username <options>'
   puts
   puts 'Input options:'
   puts '-h host      : Host or ip of mysql instance'
   puts '-u username  : Username to access mysql instance'
-  puts '-d database  : Database to warmup. Default to all databases exclude information_schema, mysql, performance_schema, sys'
+  puts '-d database  : Database to warmup.'
+  puts '               Default to all databases exclude information_schema, mysql, performance_schema, sys'
   puts '-p port      : Port to connect. Default to 3306'
   puts '--help       : Print help message'
 end
 
-options = { help: false, port: 3306, database: '' }
+options = {show_version: false, help: false, port: 3306, database: ''}
 
-OptionParser.new do |opts|
-  opts.banner = 'Usage: mysql-warmup -h host-or-ip -u username <options>'
-  opts.on('-h') do |h|
-    options[:host] = h
-  end
+begin
+  OptionParser.new do |opts|
+    opts.banner = 'Usage: mysql-warmup -h host-or-ip -u username <options>'
+    opts.on('-h', String) do |h|
+      options[:host] = h
+    end
 
-  opts.on('-u') do |u|
-    options[:username] = u
-  end
+    opts.on('-u') do |u|
+      options[:username] = u
+    end
 
-  opts.on('-d') do |d|
-    options[:database] = d
-  end
+    opts.on('-d') do |d|
+      options[:database] = d
+    end
 
-  opts.on('-p') do |p|
-    options[:port] = p
-  end
+    opts.on('-p') do |p|
+      options[:port] = p
+    end
 
-  opts.on('--help') do |_|
-    options[:help] = true
-  end
-end.parse!
+    opts.on('--help') do |_|
+      options[:help] = true
+    end
 
-if !options[:help] && params_valid?
+    opts.on('-v', '--version') do |_|
+      options[:show_version] = true
+    end
+  end.parse!
+rescue OptionParser::InvalidArgument, OptionParser::InvalidOption => e
+  puts "ERROR: #{e.message}"
+  print_help
+end
+
+puts options.inspect
+
+if options[:show_version]
+  puts MysqlWarmup::VERSION
+elsif options[:help]
+  print_help
+elsif params_valid?(options)
   puts 'Input the password:'
   password = gets.chomp
-  MysqlWarmup::Warmer.new(options[:host],
-                          options[:username],
+  MysqlWarmup::Warmer.new(options[:host].strip,
+                          options[:username].strip,
                           password,
-                          options[:database],
-                          options[:port]).warmup
+                          options[:database].strip,
+                          options[:port].strip).warmup
 else
   print_help
 end

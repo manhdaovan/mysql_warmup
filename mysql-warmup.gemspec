@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'mysql_warmup/version'
 
 Gem::Specification.new do |s|
   s.name     = 'mysql-warmup'
-  s.version  = '0.0.1'
+  s.version  = MysqlWarmup::VERSION
   s.author   = 'Manh Dao Van'
   s.email    = 'manhdaovan@gmail.com'
   s.homepage = 'https://github.com/manhdaovan/mysql_warmup'
