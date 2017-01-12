@@ -9,8 +9,9 @@ def params_valid?(options)
   required_params = [:host, :username]
   valid           = true
   required_params.each do |rp|
+    next unless options.fetch(rp, nil).nil?
+    puts ">>> ERROR: Required #{rp}"
     valid = false
-    puts ">>> ERROR: Required #{rp}" if options.fetch(rp, nil).nil?
   end
   valid
 end
