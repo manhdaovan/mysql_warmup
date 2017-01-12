@@ -1,6 +1,7 @@
 # mysql_warmup
 Simple mysql-wamup command tool for warming up mysql server after create/reboot
 [Github](https://github.com/manhdaovan/mysql_warmup)
+[RubyGems](https://rubygems.org/gems/mysql-warmup)
 
 # Background
 With InnoDB storage engine, when you've just created new slave instance,
