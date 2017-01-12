@@ -21,11 +21,11 @@ Gem::Specification.new do |s|
   s.platform              = Gem::Platform::RUBY
   s.required_ruby_version = '>= 2.0.0'
 
-  s.files         = `git ls-files`.split('\n')
+  s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test}/*`.split("\n")
   s.require_paths = ['lib']
 
-  s.executables        = ['mysql-warmup', 'console']
+  s.executables        = s.files.grep(%r{^bin/}).map { |f| File.basename(f) }
   s.default_executable = 'mysql-warmup'
   s.bindir             = 'bin'
 
