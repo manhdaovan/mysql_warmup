@@ -15,7 +15,7 @@ module MysqlWarmup
     private
 
     def build_query_string(table_name, column_name, column_type, column_key)
-      if type_primary?(column_key) && type_integer?(column_type)
+      if type_primary?(column_key)
         format_query("sum(`#{table_name}`.`#{column_name}`)", "`#{table_name}`", '1')
       elsif type_integer?(column_type)
         format_query('count(*)', "`#{table_name}`", "`#{table_name}`.`#{column_name}` LIKE '%0%'")
@@ -41,7 +41,7 @@ module MysqlWarmup
     end
 
     def type_var_char?(column_type)
-      !(column_type.downcase =~ /varchar|index/).nil?
+      !(column_type.downcase =~ /char|varchar|index/).nil?
     end
 
     def format_query(*params)
