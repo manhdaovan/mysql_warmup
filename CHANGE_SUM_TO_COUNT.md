@@ -1,6 +1,8 @@
 # Background
 When execute command to load primary key to buffer pool, what command should we do?
-`select count(*) from table_name` or `select count(*) from table_name where non_index_column = 0` or `select sum(primary_key) from table_name` ?
+`select count(*) from table_name` <br/>
+or `select count(*) from table_name where non_index_column = 0 or non_index_column = '0'`<br/>
+or `select sum(primary_key) from table_name` ?
 
 # Testing
 ### Testing environment
