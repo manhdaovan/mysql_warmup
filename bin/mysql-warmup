@@ -9,10 +9,10 @@ def print_help
   puts "mysql-warmup, by ManhDV - version #{MysqlWarmup::VERSION}"
   puts 'Website: https://github.com/manhdaovan/mysql_warmup'
   puts
-  puts 'Usage: mysql-warmup -h host-or-ip -u username <options>'
+  puts 'Usage: mysql-warmup -u username <options>'
   puts
   puts 'Input options:'
-  puts '-h host      : Host or ip of mysql instance'
+  puts '-h host      : Host or ip of mysql instance. Default is localhost'
   puts '-u username  : Username to access mysql instance'
   puts '-d database  : Database to warmup.'
   puts '               Default to all databases exclude information_schema, mysql, performance_schema, sys'
@@ -37,7 +37,7 @@ def params_valid?(options)
   valid
 end
 
-options = { show_version: false, help: false, port: 3306, database: 'all' }
+options = {show_version: false, help: false, port: 3306, database: 'all', host: 'localhost'}
 
 begin
   OptionParser.new do |opts|
