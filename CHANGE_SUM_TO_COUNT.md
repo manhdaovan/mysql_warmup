@@ -1,8 +1,18 @@
 # Background
-When execute command to load primary key to buffer pool, what command should we do?
+When execute command to load primary key to buffer pool, what command should we do? <br/>
 `select count(*) from table_name` <br/>
 or `select count(*) from table_name where non_index_column = 0 or non_index_column = '0'`<br/>
 or `select sum(primary_key) from table_name` ?
+
+####TL;DR
+1. Table with only primary key:
+    * `select count(*) from table_name where non_index_column = 0 or non_index_column = '0'` has the greatest pages loaded.
+    * `select count(*) from table_name` and `select sum(primary_key) from table_name` has the same result, and the loaded pages is less than query has `where non_index_column = 0 or non_index_column = '0'` condition.
+
+2. Table with primary and other index(es):
+    * `select count(*) from table_name`: **primary_key** will be loaded.
+    * `select sum(primary_key) from table_name`: **other_index** will be loaded.
+    * `select count(*) from table_name where non_index_column = 0 or non_index_column = '0'`: **primary_key** will be loaded with the greatest.
 
 # Testing
 ### Testing environment
