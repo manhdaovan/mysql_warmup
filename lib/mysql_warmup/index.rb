@@ -19,7 +19,8 @@ module MysqlWarmup
         if non_index_field.nil?
           format_query('count(*)', "`#{table_name}`", '1')
         else
-          format_query('count(*)', "`#{table_name}`", "`#{table_name}`.`#{non_index_field}` = 0")
+          field_name = "`#{table_name}`.`#{non_index_field}`"
+          format_query('count(*)', "`#{table_name}`", "#{field_name} = 0 or #{field_name} = '0'")
         end
       elsif type_integer?(column_type)
         format_query('count(*)', "`#{table_name}`", "`#{table_name}`.`#{column_name}` LIKE '%0%'")

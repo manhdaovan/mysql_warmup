@@ -12,7 +12,8 @@ class TestIndex < Test::Unit::TestCase
                  index.query_string)
     # 2. with non-index field
     index2 = MysqlWarmup::Index.new('table_name', 'col_name', 'INT', 'PRI', 'non_index')
-    assert_equal(build_query('count(*)', '`table_name`', '`table_name`.`non_index` = 0'),
+    field_name = '`table_name`.`non_index`'
+    assert_equal(build_query('count(*)', '`table_name`', "#{field_name} = 0 or #{field_name} = '0'"),
                  index2.query_string)
 
     # Index for other fields
