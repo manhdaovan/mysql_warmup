@@ -37,7 +37,7 @@ def params_valid?(options)
   valid
 end
 
-options = {show_version: false, help: false, port: 3306, database: 'all', host: 'localhost'}
+options = { show_version: false, help: false, port: 3306, database: 'all', host: 'localhost' }
 
 begin
   OptionParser.new do |opts|
