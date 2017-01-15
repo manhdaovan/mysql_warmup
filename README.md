@@ -19,7 +19,7 @@ You can use this tool for warming up buffer poll before the first requests come.
   * Usage as below syntax
 
 ```
-    Usage: mysql-warmup -h host-or-ip -u username <options>
+    Usage: mysql-warmup -u username <options>
 
     Input options:
     -h host      : Host or ip of mysql instance
