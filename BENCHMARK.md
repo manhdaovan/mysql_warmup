@@ -143,9 +143,16 @@ Benchmark
 
 * The main point is results in **Step1** and **Step5**. **7.562 seconds** vs **2.132 seconds** for first hits. Nice.
 * Other point is results in **Step2** and **Step6**. **1.740 seconds** vs **1.886 seconds**.
-Why?<br/>
- In **Step1**, only 20k indexes by test queries were loaded into buffer. So, when **Step2** runs, exactly 20k indexes were hit.<br/>
- But in **Step5**, all of 10M indexes were loaded (by running mysql-warmup tool). So, when **Step6** runs, it needed to find 20k indexes among 10M indexes.
+  Why?
+  In **Step1**, only 20k indexes by test queries were loaded into buffer. So, when **Step2** runs, exactly 20k indexes were hit.
+  But in **Step5**, all of 10M indexes were loaded (by running mysql-warmup tool). So, when **Step6** runs, it needed to find 20k indexes among 10M indexes.
+
+* Why result in **Step6**(1.886 seconds) is better than **Step5**(2.132 seconds), but not good as **Step2**(1.740 seconds)?
+  Because Buffer Pool uses LRU Algorithm to evict elements in buffer.
+  When **Step4** run, all indexes were loaded, and when **Step5** runs, all 20k newest indexes load.
+  When **Step6** run, all 20k indexes in **Step5** were hit, among 10M indexes. So we had above result.
+
+
 
 
 
