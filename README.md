@@ -3,6 +3,9 @@ Simple mysql-wamup command tool for warming up mysql server after create/reboot 
 [Github](https://github.com/manhdaovan/mysql_warmup) <br/>
 [RubyGems](https://rubygems.org/gems/mysql-warmup)
 
+# Benchmark
+[Benchmark](./BENCHMARK.md)
+
 # Background
 With InnoDB storage engine, when you've just created new slave instance,
 first requests to DB will be hit on disk instead of buffer poll. So, the requests will be slow down.
