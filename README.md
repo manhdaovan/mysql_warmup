@@ -4,7 +4,7 @@ Simple mysql-wamup command tool for warming up mysql server after create/reboot 
 [RubyGems](https://rubygems.org/gems/mysql-warmup)
 
 # Benchmark
-[Benchmark](./BENCHMARK.md)
+[From 7.562 seconds to 2.132 seconds](./BENCHMARK.md)
 
 # Background
 With InnoDB storage engine, when you've just created new slave instance,
