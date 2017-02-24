@@ -67,13 +67,13 @@ with `unique_string_value` is one of 10M `random_str`, and 20k of `unique_string
 * **Step0: Start MySQL with command:**
 
 ```
-mysql.server start --innodb_buffer_pool_load_at_startup=0 --innodb_buffer_pool_dump_at_shutdown=0 --innodb_buffer_pool_chunk_size=256M --innodb_buffer_pool_size=256M
+$mysql.server start --innodb_buffer_pool_load_at_startup=0 --innodb_buffer_pool_dump_at_shutdown=0 --innodb_buffer_pool_chunk_size=256M --innodb_buffer_pool_size=256M
 ```
 
 * **Step1: Run benchmark command without running mysql-warmup tool before request:**
 
 ```
-create_data mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
+$mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
 Enter password:
 Benchmark
 	Average number of seconds to run all queries: 7.562 seconds
@@ -87,7 +87,7 @@ Benchmark
 * **Step2: Run same command test immediately, to compare when all key was hit on buffer pool:**
 
 ```
-create_data mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
+$mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
 Enter password:
 Benchmark
 	Average number of seconds to run all queries: 1.740 seconds
@@ -102,7 +102,7 @@ Benchmark
 * **Step4: Run mysql-benchmark tool:**
 
 ```
-mysql-warmup -uroot -dwarmup_benchmark
+$mysql-warmup -uroot -dwarmup_benchmark
 
 Input the mysql password:
 my_mysql_root_password
@@ -116,7 +116,7 @@ my_mysql_root_password
 * **Step5: Run benchmark command same as Step1:**
 
 ```
-create_data mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
+$mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
 Enter password:
 Benchmark
 	Average number of seconds to run all queries: 2.132 seconds
@@ -129,7 +129,7 @@ Benchmark
 * **Step6: Run same command test immediately, to compare when all key was hit on buffer pool:**
 
 ```
-create_data mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
+$mysqlslap --create-schema=warmup_benchmark --delimiter=";" --query=benchmark_query_20000_rows.sql --concurrency=1 --iterations=1 -uroot -p
 Enter password:
 Benchmark
 	Average number of seconds to run all queries: 1.886 seconds
